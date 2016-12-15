@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">      
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> 
+    	<title></title>
+        <style type="text/css">
+            * {
+                margin: 0px;
+                padding: 0px;
+                box-sizing: border-box;
+            }
+            html,body {
+                max-width: 640px;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+    	<canvas id="cv" ></canvas>
+    	<script type="text/javascript" src="Fly.js"></script>
+        <script type="text/javascript" src="Bird.js"></script>
+        <script type="text/javascript" src="Sky.js"></script>
+        <script type="text/javascript" src="Land.js"></script>
+    	<script type="text/javascript" src="Pipe.js"></script>
+    	<script type="text/javascript">
+    		var cv = document.getElementById('cv');
+            cv.width = document.body.clientWidth;
+            cv.height = document.body.clientHeight;
+    		/*拿到上下文*/
+    		var ctx = cv.getContext("2d");
+
+    		
+            /*是否结束*/
+            var over = true;
+           
+            /*开始标记*/
+            var isStart = false;
+            
+    		var arrSrc = ["birds","land","pipe1","pipe2","sky"];
+    		Fly.loadImages(arrSrc,startGame);
+            function  startGame(imgList) {
+                //添加加速度  利用时间间隔计算路程，并重置速度
+                /* 速度公式： Vt = V0 + at
+                位移公式: s = V0t + 1/2at^2 */
+                var imgSky = imgList["sky"];
+                 imgSky.height = cv.height;
+                 var imgLand = imgList["land"];
+                 imgLand.height = cv.height /5;
+                 var imgBird = imgList["birds"];
+                 var imgPipe1 = imgList["pipe1"];
+                 var imgPipe2 = imgList["pipe2"];
+                
+                function start(){
+                    /*创建天空并存进数组里面*/
+                    
+                    /*角色对象数组*/
+                    var roles = []; 
+                     /*分数*/
+                    var score = 0;
+                    var pipes = [];
+                    for (var i = 0; i < 2; i++) {             
+                        var sky = Fly.getSky({
+                            ctx:ctx,
+                            x:i*imgSky.width,
+                            img:imgSky
+                        });
+                        roles.push(sky);
+                    };
+                    /*创建管道对象*/
+                    for (var i = 0; i < 6; i++) {
+                        var pipe = Fly.getPipe({
+                            ctx:ctx,
+                            x:i*cv.width/2 +300,
+                            imgUp:imgPipe2,
+                            imgDown:imgPipe1
+                        });
+                        roles.push(pipe);
+                        pipes.push(pipe);//单独的数组存储管道，用于检测分数
+                    };
+                    /*创建陆地对象*/
+                    for (var i = 0; i < 4; i++) {
+                        var land = Fly.getLand({
+                            ctx:ctx,
+                            x:i*imgLand.width,
+                            y:cv.height - imgLand.height,
+                            img:imgLand
+                        });
+                        roles.push(land);
+                    };
+
+                    var bird = Fly.getBird({
+                        ctx:ctx,
+                        y:cv.height/2,
+                        img:imgBird
+                    });
+
+                     var lastTime = Date.now();
+                    var curTime = 0;
+                    var delat = 0;
+                    render();
+
+                    cv.addEventListener('click',function  (e) { 
+                        bird.speed = -0.32;
+                    })
+
+                    function render(){ 
+                        curTime = Date.now();
+                        delat = curTime - lastTime;
+                        lastTime = curTime;
+                           
+
+                        ctx.clearRect(0, 0, cv.width, cv.height);
+                        ctx.beginPath();
+
+                        /*绘制天空陆地*/
+                        roles.forEach(function  (role) {
+                            role.draw();
+                        })
+
+                        /*添加记录分数功能*/
+                        var nextPipe = pipes[score%6];
+                        // console.log(nextPipe);
+                        if(bird.x > nextPipe.x){
+                            score++;
+                            // console.log(score);
+                        }
+                        ctx.fillStyle = "#fff";
+                        ctx.font = "80px consolas";
+                        ctx.fillText(score, cv.width/2-25, 150);
+
+                        bird.draw(delat);
+
+                        
+                        /*撞天撞地撞管道检测系统*/
+                        if(ctx.isPointInPath(bird.x, bird.y) || bird.y <= 0 || bird.y>= cv.height - imgLand.height){
+                            console.log("gameover");
+                            over = true;
+                        }
+                        if(!over){
+                            requestAnimationFrame(render);
+                        }else {
+                            startMsg();
+                        }
+                    }
+                }
+                             
+
+                cv.addEventListener('click', function  (e) {
+                    if(isInRect(e.offsetX,e.offsetY,cv.width/2-cv.width/4,cv.height/2-20,cv.width/2,48) && over){
+                       console.log('start');
+                       over = false;
+                       start();
+                    }   
+                });
+          
+            }
+            startMsg();
+            //写一个开始游戏提示信息的函数
+            function startMsg(){
+                ctx.save();
+                ctx.beginPath();
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(cv.width/2-cv.width/4, cv.height/2-20, cv.width/2, 48);
+                ctx.rect(cv.width/2-cv.width/4, cv.height/2-20, cv.width/2, 48);
+                ctx.stroke();
+                ctx.fillStyle = "hotpink";
+                ctx.font = "36px consolas";
+                ctx.fillText('开始游戏', cv.width/2-75, cv.height/2+18);
+                ctx.closePath();
+                ctx.restore();
+            }
+            
+
+    		//封装一个匹配点击座标是否再矩形内的函数
+            function isInRect(x,y,rectX,rectY,rectW,rectH){
+                if(x > rectX && x < (rectX+rectW) && y > rectY && y < (rectY+rectH)){
+                    return true;
+                }
+                return false;
+            }
+            
+    	</script>
+    </body>
+</html>

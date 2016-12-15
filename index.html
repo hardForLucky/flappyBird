@@ -39,6 +39,12 @@
            
             /*开始标记*/
             var isStart = false;
+
+            /*提示信息起始y座标*/
+            var msgY = 0;
+            var msgA = 0.1;
+            var msgSpeed = 4;
+            var msgCount = 0;
             
     		var arrSrc = ["birds","land","pipe1","pipe2","sky"];
     		Fly.loadImages(arrSrc,startGame);
@@ -119,7 +125,7 @@
                         /*绘制天空陆地*/
                         roles.forEach(function  (role) {
                             role.draw();
-                        })
+                        });
 
                         /*添加记录分数功能*/
                         var nextPipe = pipes[score%6];
@@ -152,6 +158,44 @@
                             startMsg();
                         }
                     }
+
+                    //写一个开始游戏提示信息的函数
+                    function startMsg(){
+                        if(msgCount === 10){
+                            msgY = -200;
+                            msgCount = 0;
+                        }
+                        ctx.save();
+                        ctx.clearRect(0, 0, cv.width, cv.height);
+                        ctx.beginPath();
+
+                        /*绘制天空陆地*/
+                        roles.forEach(function  (role) {
+                            role.draw();
+                        });
+                        bird.draw(delat);
+
+                        msgSpeed += msgA; 
+                        ctx.translate(0, msgY+=msgSpeed);
+                        ctx.fillStyle = '#fff';
+                        ctx.fillRect(cv.width/2-cv.width/4, cv.height/2-40, cv.width/2, 48);
+                        ctx.strokeRect(cv.width/2-cv.width/4, cv.height/2-40, cv.width/2, 48);
+                        ctx.fillStyle = "hotpink";
+                        ctx.font = "36px consolas";
+                        ctx.fillText('开始游戏', cv.width/2-75, cv.height/2-5);
+                        ctx.font = "30px '微软雅黑'";
+                        ctx.fillStyle = "purple";
+                        ctx.fillText("最高分："+(localStorage.getItem("maxScore") || 0),cv.width/2-75,cv.height/2-50);
+                        ctx.closePath();
+                        ctx.restore();
+                        if(msgY >0 ){
+                            msgCount++;
+                            msgSpeed = -Math.abs(msgSpeed*0.75);
+                        }
+                        if(msgCount < 10){
+                            requestAnimationFrame(startMsg);
+                        }
+                    }
                 }
                                  
                 start();
@@ -166,23 +210,7 @@
           
             }
             // startMsg();
-            //写一个开始游戏提示信息的函数
-            function startMsg(){
-                ctx.save();
-                ctx.beginPath();
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(cv.width/2-cv.width/4, cv.height/2-40, cv.width/2, 48);
-                ctx.rect(cv.width/2-cv.width/4, cv.height/2-40, cv.width/2, 48);
-                ctx.stroke();
-                ctx.fillStyle = "hotpink";
-                ctx.font = "36px consolas";
-                ctx.fillText('开始游戏', cv.width/2-75, cv.height/2-5);
-                ctx.font = "30px '微软雅黑'";
-                ctx.fillStyle = "purple";
-                ctx.fillText("最高分："+(localStorage.getItem("maxScore") || 0),cv.width/2-75,cv.height/2-50);
-                ctx.closePath();
-                ctx.restore();
-            }
+
             
 
     		//封装一个匹配点击座标是否再矩形内的函数

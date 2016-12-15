@@ -17,7 +17,7 @@
 			this.imgDown = options.imgDown;
 			this.imgW = this.cvW/6;
 			this.imgH = this.imgUp.height;
-			this.space = this.cvH/5.2;
+			this.space = this.cvH/5;
 			this.step = 2;
 			this.initPipeY();
 		},
@@ -31,8 +31,8 @@
         		this.x += this.imgW*3*6;
         		this.initPipeY();
         	}
-
         	
+        	//画管道
         	ctx.drawImage(this.imgUp,this.x,this.upY,this.imgW,this.imgH);
         	ctx.drawImage(this.imgDown,this.x,this.downY,this.imgW,this.imgH);
 

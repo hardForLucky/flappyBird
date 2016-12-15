@@ -20,6 +20,7 @@
     </head>
     <body>
     	<canvas id="cv" ></canvas>
+        <script type="text/javascript" src="TapClick.js"></script>
     	<script type="text/javascript" src="Fly.js"></script>
         <script type="text/javascript" src="Bird.js"></script>
         <script type="text/javascript" src="Sky.js"></script>
@@ -102,7 +103,7 @@
                     var delat = 0;
                     render();
 
-                    cv.addEventListener('click',function  (e) { 
+                    tapClick(cv,function  (e) { 
                         bird.speed = -0.32;
                     })
 
@@ -139,6 +140,9 @@
                             console.log("gameover");
                             over = true;
                         }
+
+                        /*绘制文字信息*/
+                        drawText();
                         if(!over){
                             requestAnimationFrame(render);
                         }else {
@@ -148,7 +152,7 @@
                 }
                              
 
-                cv.addEventListener('click', function  (e) {
+                tapClick(cv, function  (e) {
                     if(isInRect(e.offsetX,e.offsetY,cv.width/2-cv.width/4,cv.height/2-20,cv.width/2,48) && over){
                        console.log('start');
                        over = false;
@@ -180,6 +184,20 @@
                     return true;
                 }
                 return false;
+            }
+
+            //绘制文字
+            function drawText(){
+                ctx.save();
+                ctx.fillStyle = "#e92322";
+                ctx.font = "36px consolas";
+                ctx.fillText('咸鱼的人生', cv.width/2-75, 40);
+                ctx.fillText('不需要解释', cv.width/2-75, 80);
+                ctx.fillStyle = "purple";
+                ctx.font = "20px '微软雅黑'";
+                ctx.fillText('made by', 0, 22); 
+                ctx.fillText('daKou', 12, 44); 
+                ctx.restore();
             }
             
     	</script>

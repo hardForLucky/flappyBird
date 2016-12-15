@@ -94,7 +94,7 @@
 
                     var bird = Fly.getBird({
                         ctx:ctx,
-                        y:cv.height/2,
+                        y:cv.height/2-90,
                         img:imgBird
                     });
 
@@ -127,6 +127,9 @@
                         if(bird.x > nextPipe.x){
                             score++;
                             // console.log(score);
+                            if(localStorage.getItem("maxScore") < score){
+                                localStorage.setItem("maxScore",score);
+                            } 
                         }
                         ctx.fillStyle = "#fff";
                         ctx.font = "80px consolas";
@@ -150,10 +153,11 @@
                         }
                     }
                 }
-                             
+                                 
+                start();
 
                 tapClick(cv, function  (e) {
-                    if(isInRect(e.offsetX,e.offsetY,cv.width/2-cv.width/4,cv.height/2-20,cv.width/2,48) && over){
+                    if(isInRect(e.offsetX,e.offsetY,cv.width/2-cv.width/4,cv.height/2-40,cv.width/2,48) && over){
                        console.log('start');
                        over = false;
                        start();
@@ -161,18 +165,21 @@
                 });
           
             }
-            startMsg();
+            // startMsg();
             //写一个开始游戏提示信息的函数
             function startMsg(){
                 ctx.save();
                 ctx.beginPath();
                 ctx.fillStyle = '#fff';
-                ctx.fillRect(cv.width/2-cv.width/4, cv.height/2-20, cv.width/2, 48);
-                ctx.rect(cv.width/2-cv.width/4, cv.height/2-20, cv.width/2, 48);
+                ctx.fillRect(cv.width/2-cv.width/4, cv.height/2-40, cv.width/2, 48);
+                ctx.rect(cv.width/2-cv.width/4, cv.height/2-40, cv.width/2, 48);
                 ctx.stroke();
                 ctx.fillStyle = "hotpink";
                 ctx.font = "36px consolas";
-                ctx.fillText('开始游戏', cv.width/2-75, cv.height/2+18);
+                ctx.fillText('开始游戏', cv.width/2-75, cv.height/2-5);
+                ctx.font = "30px '微软雅黑'";
+                ctx.fillStyle = "purple";
+                ctx.fillText("最高分："+(localStorage.getItem("maxScore") || 0),cv.width/2-75,cv.height/2-50);
                 ctx.closePath();
                 ctx.restore();
             }
@@ -190,13 +197,13 @@
             function drawText(){
                 ctx.save();
                 ctx.fillStyle = "#e92322";
-                ctx.font = "36px consolas";
-                ctx.fillText('咸鱼的人生', cv.width/2-75, 40);
-                ctx.fillText('不需要解释', cv.width/2-75, 80);
+                ctx.font = "20px consolas";
+                ctx.fillText('咸鱼的人生', cv.width/2-40, 21);
+                ctx.fillText('不需要解释', cv.width/2-40, 42);
                 ctx.fillStyle = "purple";
-                ctx.font = "20px '微软雅黑'";
-                ctx.fillText('made by', 0, 22); 
-                ctx.fillText('daKou', 12, 44); 
+                ctx.font = "14px '微软雅黑'";
+                ctx.fillText('made by', 0, 17); 
+                ctx.fillText('Jie', 15, 34); 
                 ctx.restore();
             }
             

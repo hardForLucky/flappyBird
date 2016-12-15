@@ -17,7 +17,7 @@
 			this.imgDown = options.imgDown;
 			this.imgW = this.cvW/6;
 			this.imgH = this.imgUp.height;
-			this.space = this.cvH/6;
+			this.space = this.cvH/5.2;
 			this.step = 2;
 			this.initPipeY();
 		},

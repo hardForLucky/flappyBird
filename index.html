@@ -161,7 +161,7 @@
 
                     //写一个开始游戏提示信息的函数
                     function startMsg(){
-                        if(msgCount === 10){
+                        if(msgCount > 0){
                             msgY = -200;
                             msgCount = 0;
                         }
@@ -171,6 +171,10 @@
 
                         /*绘制天空陆地*/
                         roles.forEach(function  (role) {
+                            if(msgCount > 0){
+                                console.log('执行了');
+                                role.step = 0;
+                            }
                             role.draw();
                         });
                         bird.draw(delat);
@@ -189,11 +193,13 @@
                         ctx.closePath();
                         ctx.restore();
                         if(msgY >0 ){
-                            msgCount++;
                             msgSpeed = -Math.abs(msgSpeed*0.75);
+                            msgY = 0;
                         }
-                        if(msgCount < 10){
+                        if(over){
                             requestAnimationFrame(startMsg);
+                        }else {
+                            msgCount++;
                         }
                     }
                 }

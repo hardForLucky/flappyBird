@@ -45,6 +45,7 @@
             var msgA = 0.1;
             var msgSpeed = 4;
             var msgCount = 0;
+            var gameCount = 0;
             
     		var arrSrc = ["birds","land","pipe1","pipe2","sky"];
     		Fly.loadImages(arrSrc,startGame);
@@ -171,8 +172,7 @@
 
                         /*绘制天空陆地*/
                         roles.forEach(function  (role) {
-                            if(msgCount > 0){
-                                console.log('执行了');
+                            if(gameCount > 0){
                                 role.step = 0;
                             }
                             role.draw();
@@ -200,6 +200,7 @@
                             requestAnimationFrame(startMsg);
                         }else {
                             msgCount++;
+                            gameCount++;
                         }
                     }
                 }
@@ -239,7 +240,7 @@
                 ctx.font = "14px '微软雅黑'";
                 ctx.fillText('made by', 0, 17); 
                 ctx.fillText('Jie', 15, 34); 
-                ctx.fillText('version @3.0.1', 2, cv.height-5); 
+                ctx.fillText('version @3.0.3', 2, cv.height-5); 
                 ctx.restore();
             }
             

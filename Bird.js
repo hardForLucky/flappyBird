@@ -18,7 +18,7 @@
 		    this.y = options.y;
 		    this.x = 100;
 		    this.speed = 0;
-		    this.a = 0.001;
+		    this.a = 0.00095;
 		    this.maxSpeed = 0.5;//最大速度
 		    this.maxAngle = 45;//最大旋转角度
 		    this.curAngle = 0;//一开始的角度

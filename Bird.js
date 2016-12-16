@@ -40,10 +40,10 @@
 			}
 			ctx.translate(this.x,this.y);
 			ctx.rotate(this.curAngle / 180 * Math.PI);
-			ctx.drawImage(this.img, this.imgW*this.fromIndex, 0,
+			ctx.drawImage(this.img, this.imgW*Math.floor(this.fromIndex), 0,
 			this.imgW, this.imgH,-this.drawW/2,-this.drawH/2,this.drawW,this.drawH);
 
-			this.fromIndex++;
+			this.fromIndex+=0.1;
 			this.fromIndex %= 3;
 
 			ctx.restore();

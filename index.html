@@ -207,6 +207,7 @@
                 start();
 
                 tapClick(cv, function  (e) {
+                    e.preventDefault();
                     if(isInRect(e.offsetX,e.offsetY,cv.width/2-cv.width/4,cv.height/2-40,cv.width/2,48) && over){
                        console.log('start');
                        over = false;

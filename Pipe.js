@@ -28,7 +28,7 @@
         	
         	this.x -=this.step;
         	if(this.x <= -this.imgW){
-        		this.x += this.imgW*3*6;
+        		this.x += this.imgW*3*3;
         		this.initPipeY();
         	}
         	

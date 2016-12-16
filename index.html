@@ -78,7 +78,7 @@
                         roles.push(sky);
                     };
                     /*创建管道对象*/
-                    for (var i = 0; i < 6; i++) {
+                    for (var i = 0; i < 3; i++) {
                         var pipe = Fly.getPipe({
                             ctx:ctx,
                             x:i*cv.width/2 +300,
@@ -129,7 +129,7 @@
                         });
 
                         /*添加记录分数功能*/
-                        var nextPipe = pipes[score%6];
+                        var nextPipe = pipes[score%3];
                         // console.log(nextPipe);
                         if(bird.x > nextPipe.x){
                             score++;

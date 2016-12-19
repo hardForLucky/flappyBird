@@ -23,9 +23,14 @@
 	var tapClick = null;
 	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)){
 		console.log("手机");
+		var box = document.getElementById('box');
+		w.cvWidth = box.clientWidth;
+        w.cvHeight = box.clientHeight;
 		tapClick = tap;
 	}else {
 		console.log("电脑");
+		w.cvWidth = 375;
+        w.cvHeight = 677;
 		tapClick = function  (ele,callback) {
 			ele.addEventListener('click',callback);
 		}
